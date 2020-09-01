@@ -10,24 +10,46 @@ product.All = async (req, res) => {
     }
 }
 
-product.Add = (req, res) => {
-    const {name, stock, price, date} = req.body
-    const data = model.Add(name, stock, price, date)   
-    return res.send(data)
+product.urut = async(req, res) => {
+    try {
+        const data = await model.Urut()
+        return res.status(200).json(data)
+    } catch (error) {
+        return res.status(500).json("terjadi Error")
     }
-
-product.Edit = (req, res) => {
-    const {id, name, stock, price, date} = req.body
-    const data = model.Edit(id, name, stock, price, date)   
-    return res.send(data)
 }
 
-product.Delete = (req, res) => {
-    const {id} = req.body
-    const data = model.Delete(id)   
-    return res.send(data)
-}
+product.Add = async (req, res) => {
+    try {
+        const {name, stock, price, date} = req.body
+        const data = model.add(name, stock, price, date)   
+        return res.status(200).json("Berhasil Ditambahkan")
+    } catch {
+        return res.status(500).json("terjadi Error")
+    }
+} 
 
+
+product.Edit= async (req, res) => {
+    try {
+        const {id, name, stock, price, date} = req.body
+        console.log(req.body)
+        const data = model.Edit(id, name, stock, price, date)  
+        return res.status(200).json("Berhasil Diedit")
+    } catch {
+        return res.status(500).json("terjadi Error")
+    }
+} 
+
+product.Delete= async (req, res) => {
+    try {
+        const {id} = req.body
+        const data = model.Delete(id)   
+        return res.status(200).json("Berhasil Dihapus")
+    } catch {
+        return res.status(500).json("terjadi Error")
+    }
+}
 
 product.search = async (req, res) => {
     try {
@@ -43,6 +65,8 @@ product.search = async (req, res) => {
         
     }
 }
+
+
 
 
 module.exports = product

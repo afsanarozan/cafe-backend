@@ -10,23 +10,36 @@ const category = {}
         }
     }
 
-    category.add = (req, res) => {
-        const {food_category, supplier} = req.body
-        const data = model.add(food_category, supplier)
-        return res.send(data)
+    
+    category.add = async (req, res) => {
+        try {
+            const {food_category, supplier} = req.body
+            const data = model.add(food_category, supplier)
+            return res.status(200).json("Data Ditambahkan") 
+        } catch (error) {
+            return res.status(500).json('Terjadi Error')
+        }
     }
 
-    category.edit = (req, res) => {
-        const {id, food_category, supplier} = req.body
-        console.log(req.body)
-        const data = model.Edit(id, food_category, supplier)
-        return res.send(data)
+    category.edit= async (req, res) => {
+        try {
+            const {id, food_category, supplier} = req.body
+            const data = model.Edit(id, food_category, supplier)
+            return res.status(200).json("Data Di edit") 
+        } catch (error) {
+            return res.status(500).json('Terjadi Error')
+        }
     }
     
-    category.delete = (req, res) => {
-        const {id} = req.body
-        const data = model.delete(id)
-        return res.send(data)
+    category.delete= async (req, res) => {
+        try {
+            const {id} = req.body
+            const data = model.delete(id)
+            return res.status(200).json("Data Di Hapus") 
+        } catch (error) {
+            return res.status(500).json('Terjadi Error')
+        }
     }
+    
 
 module.exports = category
