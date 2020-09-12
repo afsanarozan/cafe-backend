@@ -1,0 +1,1 @@
+const bcr = require('bcrypt')
