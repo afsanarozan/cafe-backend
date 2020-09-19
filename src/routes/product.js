@@ -7,13 +7,13 @@ const routes = express.Router()
 
 routes.get("/", controller.All)
 routes.post("/", upload.single("image"),controller.Add)
-routes.put("/", controller.Edit)
-routes.delete("/",controller.Delete)
+routes.put("/", upload.single("image"),controller.Edit)
+routes.get('/:id', controller.show)
+routes.delete("/:id",controller.Delete)
 routes.get("/search", controller.search)
 routes.get("/lastupdate", controller.lastupdate)
-routes.get("/name",controller.name)
-routes.get("/category",controller.category)
-routes.get("/price",controller.price)
+routes.get("/:id/name",controller.name)
+routes.get("/price", controller.price)
 
 
 module.exports = routes

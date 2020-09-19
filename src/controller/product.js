@@ -14,6 +14,20 @@ product.All = async (req, res) => {
     }
 }
 
+product.show = async (req, res) => {
+    try {
+        const id = req.params.id
+        console.log(req.params.id)
+        const data = await model.get(id)
+        const data_redis = JSON.stringify(data)
+        redis.redisdb.setex("product", 30, data_redis)
+        return res.status(200).json(data)
+    } catch (error) {
+        return respon(res, 500, 'Error', error)
+    }
+}
+
+
 product.lastupdate = async(req, res) => {
     try {
         const data = await model.Lupdate()
@@ -32,19 +46,10 @@ product.name = async(req, res) => {
     }
 }
 
-product.category = async(req, res) => {
-    try {
-        const data = await model.Category()
-        return res.status(200).json(data)
-    } catch (error) {
-        return res.status(500).json("terjadi Error")
-    }
-}
-
 product.price = async(req, res) => {
     try {
-        const data = await model.Price()
-        return res.send('Data Ditambahkan')
+        const data = await model.Price()   
+        return res.status(200).json(data)
     } catch (error) {
         return res.status(500).json("terjadi Error")
     }
@@ -55,9 +60,7 @@ product.Add = async(req, res) => {
         if (req.file === undefined){
             console.log(req.file)
             return res.status(500).json("Data Kosong")
-        }
-        // const {name,  price, date, images} = req.body
-        // console.log(req.body)   
+        }  
         const datas = {
             name: req.body.name,
             price : req.body.price,
@@ -74,10 +77,14 @@ product.Add = async(req, res) => {
 
 product.Edit= async (req, res) => {
     try {
-        const {id, name, images, price, date} = req.body
-        console.log(req.body)
-        const data = model.Edit(id, name, images, price, date)  
-        return res.status(200).json("Berhasil Diedit")
+        const datas = {
+            id: req.body.id,
+            name: req.body.name,
+            price : req.body.price,
+            image: req.file.path,
+        }  
+        const data = await model.Edit(datas)
+        return respon(res, 201, datas)
     } catch {
         return res.status(500).json("terjadi Error")
     }
@@ -85,9 +92,9 @@ product.Edit= async (req, res) => {
 
 product.Delete= async (req, res) => {
     try {
-        const {id} = req.body
+        const id = req.params.id
         const data = model.Delete(id)   
-        return res.status(200).json("Berhasil Dihapus")
+        return res.status(200).json(data)
     } catch {
         return res.status(500).json("terjadi Error")
     }

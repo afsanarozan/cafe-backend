@@ -4,7 +4,7 @@ const product = {}
 
 product.GetAll = () => {
     return new Promise((resolve, reject) => { 
-        database.query('SELECT * FROM product ORDER BY id ASC')
+        database.query(`SELECT * FROM product ORDER BY id ASC`)
         .then(res => {
             resolve(res.rows)
             if (res.rows == []){
@@ -14,6 +14,18 @@ product.GetAll = () => {
         .catch(err => {
             reject(err)
         })
+    })
+}
+
+product.get = (id) => {
+    return new Promise((resolve, reject) => {
+        database.query(`SELECT * FROM public.product WHERE id=${id}`)
+            .then((res) => {
+                resolve(res.rows)
+            })
+            .catch((err) => {
+                reject(err)
+            })
     })
 }
 
@@ -39,20 +51,9 @@ product.Name = () => {
     })
 }
 
-product.Category = () => {
-    return new Promise ((resolve, reject) => {
-        database.query ('SELECT * FROM public.product ORDER BY food_category ASC')
-        .then(res => {
-            resolve(res.rows)
-        }) .catch(err => {
-            reject(err)
-        })
-    })
-}
-
 product.Price = () => {
     return new Promise ((resolve, reject) => {
-        database.query ('SELECT * FROM public.product ORDER BY price DESC')
+        database.query ('SELECT * FROM public.product ORDER BY price ASC')
         .then(res => {
             resolve(res.rows)
         }) .catch(err => {
@@ -77,7 +78,7 @@ product.Get= (name) => {
 
 product.Add = (data) => {
     return new Promise((resolve, reject) => {
-    database.query(`INSERT INTO product (name, price, date, images) VALUES ('${data.name}', '${data.price}', 'now()' , '${data.image}')`)
+    database.query(`INSERT INTO product (name, price, date, images) VALUES ('${data.name}', '${data.price}', 'now()' , '${data.image} ')`)
         .then(res => {
             resolve(res)
             console.log(res)
@@ -90,17 +91,19 @@ product.Add = (data) => {
 }
 
 
-product.Edit = (id, name, images, price, date) => {
+product.Edit = (data) => {
+    return new Promise((resolve, reject) => {
     database
-    .query(`UPDATE product SET name='${name}', images='${images}', price='${price}', date='now()' WHERE id = ${id} `)
+    .query(`UPDATE product SET name='${data.name}', images='${data.image}', price='${data.price}', date='now()' WHERE id = ${data.id} RETURNING *`)
     .then(res => {
-        return res
+        resolve(res.rows)
     })
     .catch(err => {
-        console.log(err)
-        return err
+        reject(err)
     })
-} 
+ })
+}
+
 
 
 product.Delete = (id) => {
