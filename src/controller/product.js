@@ -100,18 +100,14 @@ product.Delete= async (req, res) => {
     }
 }
 
-product.search = async (req, res) => {
+product.Search = async (req, res) => {
     try {
         const name = req.query.name
-        const data = await model.Get(name)
-        if(data == ''){
-        return res.status(200).json('Data Tidak Ada')
-    } else {
+        const data = await model.Search(name)
+        console.log(data)
         return res.status(200).json(data)
-    }
     } catch (error) {
-        return res.status(500).json("Error")
-        
+        return respon(res, 500, "error" )
     }
 }
 

@@ -31,7 +31,7 @@ product.get = (id) => {
 
 product.Lupdate = () => {
     return new Promise ((resolve, reject) => {
-        database.query ('SELECT * FROM public.product ORDER BY product.id DESC')
+        database.query ('SELECT * FROM public.product ORDER BY id DESC')
         .then(res => {
             resolve(res.rows)
         }) .catch(err => {
@@ -62,14 +62,16 @@ product.Price = () => {
     })
 }
 
-product.Get= (name) => {
+product.Search = (name) => {
+    console.log(name)
     return new Promise((resolve, reject) => {
-        database.query(`SELECT * FROM public.product WHERE name = '${name}'`)
+        database.query(`SELECT * FROM public.product WHERE name ='${name}'`)
         .then(res => {
             resolve(res.rows)
         }) 
         .catch(err => {
             reject(err)
+            console.log("err")
 
         })
     })

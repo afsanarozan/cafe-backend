@@ -9,11 +9,11 @@ routes.get("/", controller.All)
 routes.post("/", upload.single("image"),controller.Add)
 routes.put("/", upload.single("image"),controller.Edit)
 routes.get('/:id', controller.show)
-routes.delete("/:id",controller.Delete)
-routes.get("/search", controller.search)
-routes.get("/lastupdate", controller.lastupdate)
+routes.delete("/:id", controller.Delete)
+routes.get("/:id/search", controller.Search)
+routes.get("/:id/lastupdate", controller.lastupdate)
 routes.get("/:id/name",controller.name)
-routes.get("/price", controller.price)
+routes.get("/:id/price", controller.price)
 
 
 module.exports = routes
