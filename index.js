@@ -7,9 +7,15 @@ const databases = require('./src/config/databases')
 const port = 2000
 const cors = require('cors')
 const redis = require('./src/config/redis')
+const log = require('simple-node-logger').createSimpleFileLogger('project.log');
+const fs = require('fs')
+const path = require('path')
+
 
 server.use(bodyParser.urlencoded({extended: false}))
 server.use(bodyParser.json())
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'project.log'), { flags: 'a' })
+server.use(morgan('common',{ stream: accessLogStream })) 
 server.use(morgan('dev'))
 server.use(routes)
 server.use(cors())
