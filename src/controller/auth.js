@@ -35,15 +35,15 @@ setToken = async (hak) => {
         hak : hak,
     }
 
-    const token =  jwt.sign(payload, process.env.JWT_KEYS, {expiresIn: 60})
+    const token =  jwt.sign(payload, process.env.JWT_KEYS, {expiresIn: 7200})
     const refreshToken =  jwt.sign(payload, process.env.JWT_KEYS, {expiresIn: 7200})
     
     const result = {
         token: token,
         refreshToken : refreshToken,
-        msg: "Token created, login succsess",
+        msg: "Token created, login success",
     }
-
+    console.log(result.msg)
     return result    
     } catch (error) {
         throw error

@@ -14,6 +14,16 @@ product.All = async (req, res) => {
     }
 }
 
+product.filter = async (req, res) => {
+    try {
+        const orderBy = req.query.order
+        const data = await model.filter(orderBy)
+        return res.status(200).json(data)
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+}
+
 product.show = async (req, res) => {
     try {
         const id = req.params.id
@@ -103,9 +113,14 @@ product.Delete= async (req, res) => {
 product.Search = async (req, res) => {
     try {
         const name = req.query.name
-        const data = await model.Search(name)
+        const sensitive = req.query.sensitive
+        const data = await model.Search(name, sensitive)
         console.log(data)
-        return res.status(200).json(data)
+        if (data.rowCount > 0) {
+            return res.send(data.rows)
+        } else {
+            return res.send({ success: true, message: "not found." })
+        }
     } catch (error) {
         return respon(res, 500, "error" )
     }

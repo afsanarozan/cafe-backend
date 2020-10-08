@@ -17,6 +17,31 @@ product.GetAll = () => {
     })
 }
 
+product.filter = (orderBy) => {
+    return new Promise((resolve, reject) => {
+        let query;
+        if (orderBy == "id") {
+            query = `SELECT * FROM product ORDER BY id ASC`
+        } else if (orderBy == "name") {
+            query = `SELECT * FROM public.product ORDER BY name ASC`
+        } else if (orderBy == "price") {
+            query = `SELECT * FROM public.product ORDER BY price ASC`
+        } else if (orderBy == "latest") {
+            query = `SELECT * FROM public.product ORDER BY id DESC`
+        } else {
+            query = false
+        }
+        if (query != false) {
+            database.query(query)
+                .then(res => resolve(res.rows))
+                .catch(err => reject(err))
+        } else {
+            resolve(false)
+        }
+
+    })
+}
+
 product.get = (id) => {
     return new Promise((resolve, reject) => {
         database.query(`SELECT * FROM public.product WHERE id=${id}`)
@@ -62,18 +87,18 @@ product.Price = () => {
     })
 }
 
-product.Search = (name) => {
-    console.log(name)
+product.Search = (name, sensitive = "false") => {
     return new Promise((resolve, reject) => {
-        database.query(`SELECT * FROM public.product WHERE name ='${name}'`)
-        .then(res => {
-            resolve(res.rows)
-        }) 
-        .catch(err => {
-            reject(err)
-            console.log("err")
-
-        })
+        database.query(`SELECT * FROM public.product WHERE lower(name) LIKE lower('${name}%');`)
+        if (sensitive == "false") {
+            database.query(`SELECT * FROM product WHERE lower(name) LIKE lower('${name}%');`)
+                .then(res => resolve(res))
+                .catch(err => reject(err))
+        } else {
+            database.query(`SELECT * FROM product WHERE lower(name) LIKE lower('%${name}%');`)
+                .then(res => resolve(res))
+                .catch(err => reject(err))
+        }
     })
 }
 
