@@ -72,7 +72,10 @@ pipeline {
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: 'docker pull 32480/backend:dev; docker kill backend;docker run -d --rm -p 3000:80 --name backend 32480/backend:dev',
+                                        sourceFiles: 'docker-compose.yml',
+                                        remoteDirectory: 'backend',
+                                        execCommand: 'cd backend && docker-compose up -d',
+                                        // execCommand: 'docker pull 32480/backend:dev; docker kill backend;docker run -d --rm -p 3000 --name backend 32480/backend:dev',
                                         execTimeout: 120000,
                                     )
                                 ]
