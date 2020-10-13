@@ -74,7 +74,7 @@ pipeline {
                                     sshTransfer(
                                         sourceFiles: 'docker-compose.yml',
                                         remoteDirectory: 'backend',
-                                        execCommand: 'docker-compose -f backend/docker-compose.yml stop; docker-compose -f backend/docker-compose.yml up -d',       
+                                        execCommand: 'cd backend && docker-compose up -d',
                                         execTimeout: 120000,
                                     )
                                 ]
