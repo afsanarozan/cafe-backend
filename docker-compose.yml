@@ -28,6 +28,7 @@ services:
             - DB_PASS=hahaha321
             - DB_HOST=postgres
             - SERVICEPORT=2000
+            - REDIS_PORT=6380
 
     redis:
         image: redis
@@ -36,7 +37,7 @@ services:
         environment: 
             - REDIS_PORT=6379
         ports: 
-            - "6379:6379"
+            - "6380:6379"
         networks:
             - deploy
         volumes:
