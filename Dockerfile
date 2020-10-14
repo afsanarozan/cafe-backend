@@ -1,6 +1,10 @@
-FROM node:12.4.0-alpine
+FROM node:lts-alpine
 
-WORKDIR /usr/app
+RUN mkdir -p /usr/sampleapp
+
+WORKDIR /usr/sampleapp
+
+COPY package*.json ./
 
 COPY . .
 
@@ -8,4 +12,4 @@ RUN npm install
 
 EXPOSE 2000
 
-CMD ["npm", "index.js"]
+CMD [ "node", "index.js" ]

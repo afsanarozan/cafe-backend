@@ -3148,3 +3148,8 @@
 ::1 - - [11/Oct/2020:16:31:32 +0000] "GET /api/product/id/filter?order=latest HTTP/1.1" 304 -
 ::1 - - [11/Oct/2020:16:31:38 +0000] "OPTIONS /api/product/id/filter?order=latest HTTP/1.1" 200 8
 ::1 - - [11/Oct/2020:16:31:38 +0000] "GET /api/product/id/filter?order=latest HTTP/1.1" 304 -
+::1 - - [13/Oct/2020:03:53:42 +0000] "GET /api/product/ HTTP/1.1" 401 144
+::1 - - [13/Oct/2020:03:54:06 +0000] "POST /auth HTTP/1.1" 200 406
+::1 - - [13/Oct/2020:03:54:28 +0000] "GET /api/product/ HTTP/1.1" 200 1345
+::1 - - [13/Oct/2020:03:54:57 +0000] "POST /api/product HTTP/1.1" 201 138
+::1 - - [13/Oct/2020:03:55:08 +0000] "GET /api/product/ HTTP/1.1" 200 1481
