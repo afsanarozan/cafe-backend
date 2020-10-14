@@ -44,7 +44,6 @@ services:
             - DB_HOST=postgres
             - SERVICEPORT=2000
             - REDIS_PORT=6379
-            - REDIS_HOST=redis
 
     
 
