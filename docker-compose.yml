@@ -1,30 +1,5 @@
 version: '3.7'
-
 services:
-    backend:
-        image: backend:latest
-        container_name: backend
-        ports:
-            - 2000:2000
-        networks:
-            - deploy
-        depends_on:
-            - postgres
-        environment: 
-            DB_USER=super
-            DB_DATABASE=mydb
-            DB_PASS=hahaha321
-            DB_HOST=postgres
-            SERVICEPORT=9000
-        deploy:
-            resources:
-                limits:
-                    cpus: '1'
-                    memory: 200M
-                reservations:
-                    cpus: '1'
-                    memory: 200M    
-
     postgres:
         image: postgres:latest
         container_name: postgres
@@ -39,6 +14,21 @@ services:
         volumes:
             - ./pgdata:/var/lib/postgresql/data
 
+    backend:
+        image: backend:latest
+        ports:
+            - 2000:2000
+        networks:
+            - deploy
+        depends_on:
+            - postgres
+        environment: 
+            DB_USER=super
+            DB_DATABASE=mydb
+            DB_PASS=hahaha321
+            DB_HOST=postgres
+            SERVICEPORT=9000
+
     redis:
         image: redis
         command: redis-server --requirepass kodekonan
@@ -52,10 +42,7 @@ services:
         volumes:
             - ./redis-data:/var/lib/redis
 
+    
+
 networks:
     deploy:
-        driver: bridge
-    
-volumes:
-    postgres-data:
-    redis-data:
