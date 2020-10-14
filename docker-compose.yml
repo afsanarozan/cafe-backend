@@ -1,5 +1,18 @@
 version: '3.7'
 services:
+    redis:
+        image: redis
+        command: redis-server --requirepass kodekonan
+        container_name: redis
+        ports: 
+            - "6379:6379"
+        networks:
+            - deploy
+        volumes:
+            - ./redis-data:/var/lib/redis
+        environment: 
+            - REDIS_REPLICATION_MODE=master
+
     postgres:
         image: postgres:latest
         container_name: postgres
@@ -14,10 +27,13 @@ services:
         volumes:
             - ./pgdata:/var/lib/postgresql/data
 
-    backend:
+    nodejs:
         image: backend:latest
         ports:
             - "2000:2000"
+        depends_on:
+            - postgres
+            - redis            
         networks:
             - deploy
         depends_on:
@@ -28,20 +44,9 @@ services:
             - DB_PASS=hahaha321
             - DB_HOST=postgres
             - SERVICEPORT=2000
-            - REDIS_PORT=6380
-
-    redis:
-        image: redis
-        command: redis-server --requirepass kodekonan
-        container_name: redis
-        environment: 
             - REDIS_PORT=6379
-        ports: 
-            - "6380:6379"
-        networks:
-            - deploy
-        volumes:
-            - ./redis-data:/var/lib/redis
+
+    
 
 networks:
     deploy:
