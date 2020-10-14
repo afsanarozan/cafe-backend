@@ -1,24 +1,21 @@
-version: '3.3'
+version: '3.7'
 
 services:
     backend:
-        image: 32480/backend:dev
+        image: backend:latest
         container_name: backend
         ports:
-            - 3000:3000
+            - 2000:2000
         networks:
             - deploy
         depends_on:
             - postgres
         environment: 
-            - PORT=2000
-            - REDIS_HOST=redis
-            - REDIS_PORT=6379
-            - DB_HOST=postgres
-            - DB_USER=super
-            - DB_PASSWORD=hahaha321
-            - DB_NAME=mydb
-            - JWT_KEYS=awokawokawok
+            DB_USER=super
+            DB_DATABASE=mydb
+            DB_PASS=hahaha321
+            DB_HOST=postgres
+            SERVICEPORT=9000
         deploy:
             resources:
                 limits:
@@ -27,19 +24,21 @@ services:
                 reservations:
                     cpus: '1'
                     memory: 200M    
+
     postgres:
-        image: postgres
+        image: postgres:latest
         container_name: postgres
         environment:
-            - POSTGRES_USER=super
-            - POSTGRES_PASSWORD=hahaha321
-            - POSTGRES_DB=mydb
+            POSTGRES_USER=super
+            POSTGRES_PASSWORD=hahaha321
+            POSTGRES_DB=mydb
         ports:
-            - 5432:5432
+            - "5151:5432"
         networks: 
             - deploy
         volumes:
-            - ./postgres-data:/var/lib/postgresql/data
+            - ./pgdata:/var/lib/postgresql/data
+
     redis:
         image: redis
         command: redis-server --requirepass kodekonan
