@@ -4,9 +4,9 @@ services:
         image: postgres:latest
         container_name: postgres
         environment:
-            POSTGRES_USER=super
-            POSTGRES_PASSWORD=hahaha321
-            POSTGRES_DB=mydb
+            - POSTGRES_USER=super
+            - POSTGRES_PASSWORD=hahaha321
+            - POSTGRES_DB=mydb
         ports:
             - "5151:5432"
         networks: 
@@ -23,11 +23,11 @@ services:
         depends_on:
             - postgres
         environment: 
-            DB_USER=super
-            DB_DATABASE=mydb
-            DB_PASS=hahaha321
-            DB_HOST=postgres
-            SERVICEPORT=9000
+            - DB_USER=super
+            - DB_DATABASE=mydb
+            - DB_PASS=hahaha321
+            - DB_HOST=postgres
+            - SERVICEPORT=9000
 
     redis:
         image: redis
