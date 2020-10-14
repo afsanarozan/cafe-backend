@@ -2,15 +2,13 @@ version: '3.7'
 services:
     redis:
         image: "redis:latest"
-        ports: 
-            - "6379:6379"
         networks:
             - deploy
         volumes:
             - ./redis-data:/var/lib/redis
             - ./redis.conf:/usr/local/etc/redis/redis.conf
         environment: 
-            - REDIS_REPLICATION_MODE=master
+            - REDIS_PORT=6379
 
     postgres:
         image: postgres:latest
