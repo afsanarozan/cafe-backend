@@ -43,7 +43,7 @@ services:
             - DB_HOST=postgres
             - SERVICEPORT=2000
             - REDIS_HOST=redis
-            - REDIS_PASSWORD=redispass123
+            - REDIS_PASS=redispass123
             - REDIS_PORT=6379
             - JWT_KEYS=awokawokawok
 
