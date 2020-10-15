@@ -5,7 +5,7 @@ const validate = require('../middleware/validate')
 const chace = require('../middleware/chace')
 const routes = express.Router()
 
-routes.get("/", chace,controller.All)
+routes.get("/", validate,chace,controller.All)
 routes.post("/", upload.single("image"),controller.Add)
 routes.put("/", upload.single("image"),controller.Edit)
 routes.get('/:id', controller.show)
