@@ -28,7 +28,7 @@ services:
             - ./postgres-data:/var/lib/postgresql/data
 
     nodejs:
-        image: backend
+        image: backend:1.4.0
         ports:
             - 2000:2000
         depends_on:
