@@ -28,7 +28,7 @@ services:
             - ./postgres-data:/var/lib/postgresql/data
 
     nodejs:
-        image: backend:latest
+        image: backend
         ports:
             - 2000:2000
         depends_on:
@@ -37,10 +37,10 @@ services:
         networks:
             - deploy
         environment: 
-            - DB_USER=postgres
+            - DB_USER=super
             - DB_DATABASE=mydb
             - DB_PASS=hahaha321
-            - DB_HOST=postgres
+            - DB_HOST=super
             - SERVICEPORT=2000
             - REDIS_HOST=redis
             - REDIS_PASSWORD=redispass123
@@ -57,3 +57,8 @@ services:
 
 networks:
     deploy:
+        driver: bridge
+    
+volumes:
+    postgres-data:
+    redis-data:
