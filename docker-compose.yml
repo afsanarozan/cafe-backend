@@ -32,11 +32,10 @@ services:
         ports:
             - 2000:2000
         depends_on:
-            - postgres    
+            - postgres
+            - redis    
         networks:
             - deploy
-        depends_on:
-            - postgres
         environment: 
             - DB_USER=postgres
             - DB_DATABASE=mydb
