@@ -21,7 +21,7 @@ services:
             - POSTGRES_PASSWORD=hahaha321
             - POSTGRES_DB=mydb
         ports:
-            - 5432:5432
+            - 5433:5432
         networks: 
             - deploy
         volumes:
