@@ -46,14 +46,6 @@ services:
             - REDIS_PASSWORD=redispass123
             - REDIS_PORT=6379
             - JWT_KEYS=awokawokawok
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.001'
-                    memory: 50M
-                reservations:
-                    cpus: '0.0001'
-                    memory: 20M    
 
 networks:
     deploy:
