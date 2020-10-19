@@ -34,7 +34,7 @@ pipeline {
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: 'cd ansible; ansible-playbook -i hosts play.yml',
+                                        execCommand: 'cd ansible; ansible-playbook -i hosts db-center.yml',
                                     )
                                 ]
                             )
