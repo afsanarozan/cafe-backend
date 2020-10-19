@@ -84,7 +84,7 @@ pipeline {
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: 'ansible prod-server -a "curl localhost:8080"',
+                                        execCommand: 'ansible prod-server -a "cd project/backend; docker-compose -up -d"',
                                         execTimeout: 60000,
                                     )
                                 ]
