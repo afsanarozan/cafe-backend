@@ -28,7 +28,7 @@ services:
     nodejs:
         image: backend
         build:
-            context: backend/
+            context: /
         ports:
             - 2000:2000
         depends_on:
