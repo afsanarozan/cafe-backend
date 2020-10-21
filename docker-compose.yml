@@ -3,13 +3,13 @@ services:
     postgres:
         image: postgres:latest
         ports:
-            - "5432:5432"
+            - "5151:5432"
         networks: 
             - deploy
         volumes:
             - ./postgres-data:/var/lib/postgresql/data
         environment:
-            - POSTGRES_USER=super
+            - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=hahaha321
             - POSTGRES_DB=mydb
      
@@ -31,14 +31,14 @@ services:
     nodejs:
         image: example/backend:latest
         ports:
-            - 2000:2000
+            - 9191:2000
         depends_on:
             - postgres
             - redis    
         networks:
             - deploy
         environment: 
-            - DB_USER=super
+            - DB_USER=postgres
             - DB_DATABASE=mydb
             - DB_PASS=hahaha321
             - DB_HOST=postgres
