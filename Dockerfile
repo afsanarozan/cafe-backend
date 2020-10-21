@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:latest
 
 RUN mkdir -p /usr/sampleapp
 
