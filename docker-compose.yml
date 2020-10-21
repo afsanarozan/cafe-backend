@@ -3,13 +3,13 @@ services:
     postgres:
         image: postgres:latest
         ports:
-            - "5151:5432"
+            - 5151:5432
         networks: 
             - deploy
         volumes:
             - ./postgres-data:/var/lib/postgresql/data
         environment:
-            - POSTGRES_USER=postgres
+            - POSTGRES_USER=super
             - POSTGRES_PASSWORD=hahaha321
             - POSTGRES_DB=mydb
      
@@ -38,7 +38,7 @@ services:
         networks:
             - deploy
         environment: 
-            - DB_USER=postgres
+            - DB_USER=super
             - DB_DATABASE=mydb
             - DB_PASS=hahaha321
             - DB_HOST=postgres
