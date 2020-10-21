@@ -7,8 +7,8 @@ const chace = require('../middleware/chace')
  
 routes.get('/', chace,controller.getAll)
 routes.get('/', controller.getByUser)
-routes.post('/', validate, chace, controller.Add)
-routes.put('/', validate,controller.Edit)
-routes.delete('/', validate,controller.Delete)
+routes.post('/', chace, controller.Add)
+routes.put('/', controller.Edit)
+routes.delete('/', controller.Delete)
 
 module.exports = routes
