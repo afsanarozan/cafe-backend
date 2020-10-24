@@ -20,9 +20,29 @@ pipeline {
         }
 
         stage('Build image') {
+            steps{
+               script {
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ansible',
+                                verbose: false,
+                                transfers: [
+                                    sshTransfer(
+                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts builder.yml',
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
+
+        stage('deployment') {
             when {
                 expression {
-                    BRANCH_NAME == "dev"
+                    CICD == 'CICD'
                 }
             }
             steps{
@@ -34,7 +54,7 @@ pipeline {
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts builderdev.yml',
+                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts deploy.yml',
                                     )
                                 ]
                             )
@@ -44,60 +64,11 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
-            when {
-                expression {
-                    BRANCH_NAME == "prod"
-                }
-            }
-            steps{
-               script {
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: 'ansible',
-                                verbose: false,
-                                transfers: [
-                                    sshTransfer(
-                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts builderprod.yml',
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                }
-            }
-        }
 
-        stage('deployment to development') {
+        stage('Run Testing ') {
             when {
                 expression {
-                    BRANCH_NAME == "dev" && CICD == 'CICD'
-                }
-            }
-            steps{
-               script {
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: 'ansible',
-                                verbose: false,
-                                transfers: [
-                                    sshTransfer(
-                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts deployDev.yml',
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                }
-            }
-        }
-
-               stage('Run Testing Development') {
-            when {
-                expression {
-                    BRANCH_NAME == "dev" && CICD == 'CICD'
+                   CICD == 'CICD'
                 }
             }
             steps{
@@ -110,57 +81,6 @@ pipeline {
                                 transfers: [
                                     sshTransfer(
                                         execCommand: 'ansible db-center -a "curl localhost:9191"',
-                                        execTimeout: 60000,
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                }
-            }
-        }
-
-        stage('deployment to production') {
-            when {
-                expression {
-                    BRANCH_NAME == "prod" && CICD == 'CICD'
-                }
-            }
-            steps{
-               script {
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: 'ansible',
-                                verbose: false,
-                                transfers: [
-                                    sshTransfer(
-                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts deployProd.yml',
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                }
-            }
-        }
-
-        stage('Run Testing production') {
-            when {
-                expression {
-                    BRANCH_NAME == "prod"  && CICD == 'CICD'
-                }
-            }
-            steps{
-               script {
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: 'ansible',
-                                verbose: false,
-                                transfers: [
-                                    sshTransfer(
-                                        execCommand: 'ansible prod-server -a "curl localhost:9191"',
                                         execTimeout: 60000,
                                     )
                                 ]
