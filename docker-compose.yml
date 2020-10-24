@@ -13,15 +13,15 @@ services:
             - POSTGRES_PASSWORD=hahaha321
             - POSTGRES_DB=mydb
 
-    demo-pgadmin4: 
-        image: dpage/pgadmin4
-        environment: 
-            PGADMIN_DEFAULT_EMAIL: afsanarozannaufal9@gmail.com
-            PGADMIN_DEFAULT_PASSWORD: hahaha321
-        ports: 
-            - 7171:80
-        networks: 
-            - deploy
+    # demo-pgadmin4: 
+    #     image: dpage/pgadmin4
+    #     environment: 
+    #         PGADMIN_DEFAULT_EMAIL: afsanarozannaufal9@gmail.com
+    #         PGADMIN_DEFAULT_PASSWORD: hahaha321
+    #     ports: 
+    #         - 7171:80
+    #     networks: 
+    #         - deploy
     
     redis:
         image: redis
