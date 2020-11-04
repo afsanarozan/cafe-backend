@@ -7,7 +7,6 @@ class Auth {
 login = async(req, res) => {
     try {
         const passDB = await model.getByUser(req.body.name)
-        console
         
         if (passDB <= 0 ){
             return respon(res, 200, "Username tidak Ada")
