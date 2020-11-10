@@ -16,7 +16,7 @@ services:
     demo-pgadmin4: 
         image: dpage/pgadmin4
         environment: 
-            PGADMIN_DEFAULT_EMAIL: afsanarozannaufal9@gmail.com
+            PGADMIN_DEFAULT_EMAIL: afsanarozanaufal@gmail.com
             PGADMIN_DEFAULT_PASSWORD: hahaha321
         ports: 
             - 7171:80
