@@ -46,8 +46,7 @@ setToken = async (hak) => {
     return result    
     } catch (error) {
         throw error
-        
-}
+    }
     
 }
 
