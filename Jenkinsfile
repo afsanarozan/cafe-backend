@@ -2,80 +2,34 @@ def builderDocker
 def CommitHash
 
 pipeline {
-
-    agent any
+    agent any 
 
     parameters {
-        booleanParam(name: 'RUNTEST', defaultValue: true, description: 'Toggle this value from testing')
+        booleanParam(name: 'RunTest', defaultValue: true, description: 'Toggle this value for testing')
+        choice(name: 'CICD', choices: ['CI', 'CICD'], description: 'pick CI / CI and CD')
+        
     }
-
     stages {
 
-        stage('Build Project') {
-            steps {
+        stage('build Project') {
+            steps{
                 nodejs("node12") {
                     sh 'yarn install'
                 }
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    CommitHash = sh (script : "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-                    builderDocker = docker.build("32480/backend:${CommitHash}")
-                }
-            }
-        }
-
-        stage('Run Testing') {
-            when {
-                expression {
-                    params.RUNTEST
-                }
-            }
-            steps {
-                script {
-                    builderDocker.inside {
-                        sh 'echo passed'
-                    }
-                }
-            }
-        }
-
-        stage('Push Image') {
-            when {
-                expression {
-                    params.RUNTEST
-                }
-            }
-            steps {
-                
-                script {
-                    builderDocker.push("${env.GIT_BRANCH}")
-                }
-            }
-        }
-
-        stage('Deploy on development') {
-            when {
-                expression {
-                    BRANCH_NAME == 'dev'
-                }
-            }
-            steps {
-                script {
+        stage('Build image') {
+            steps{
+               script {
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'Developmen',
+                                configName: 'ansible',
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: 'docker-compose.yml',
-                                        remoteDirectory: 'backend',
-                                        execCommand: 'cd backend && docker-compose up -d',
-                                        execTimeout: 120000,
+                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts builder.yml',
                                     )
                                 ]
                             )
@@ -84,25 +38,23 @@ pipeline {
                 }
             }
         }
-        stage('Deploy on production') {
+
+        stage('deployment') {
             when {
                 expression {
-                    BRANCH_NAME == 'master'
+                    CICD == 'CICD'
                 }
             }
-            steps {
-                script {
+            steps{
+               script {
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'production',
+                                configName: 'ansible',
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: 'docker-compose.yml',
-                                        remoteDirectory: 'backend',
-                                        execCommand: 'cd backend && docker-compose up -d',
-                                        execTimeout: 120000,
+                                        execCommand: 'cd ansible2/ansible/backend; ansible-playbook -i hosts deploy.yml',
                                     )
                                 ]
                             )
@@ -111,5 +63,32 @@ pipeline {
                 }
             }
         }
+
+
+        stage('Run Testing ') {
+            when {
+                expression {
+                   CICD == 'CICD'
+                }
+            }
+            steps{
+               script {
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'ansible',
+                                verbose: false,
+                                transfers: [
+                                    sshTransfer(
+                                        execCommand: 'ansible db-center -a "curl localhost:9191"',
+                                        execTimeout: 60000,
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        } 
     }
 }

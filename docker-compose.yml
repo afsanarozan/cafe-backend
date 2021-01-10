@@ -1,5 +1,28 @@
 version: '3.3'
 services:
+    postgres:
+        image: postgres:latest
+        ports:
+            - 5151:5432
+        networks: 
+            - deploy
+        volumes:
+            - ./postgres-data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_USER=super
+            - POSTGRES_PASSWORD=hahaha321
+            - POSTGRES_DB=mydb
+
+    demo-pgadmin4: 
+        image: dpage/pgadmin4
+        environment: 
+            PGADMIN_DEFAULT_EMAIL: afsanarozanaufal@gmail.com
+            PGADMIN_DEFAULT_PASSWORD: hahaha321
+        ports: 
+            - 7171:80
+        networks: 
+            - deploy
+    
     redis:
         image: redis
         command: redis-server --requirepass redispass123
@@ -13,29 +36,18 @@ services:
         volumes:
             - ./redis-data:/var/lib/redis
 
-    postgres:
-        image: postgres
-        container_name: postgres
-        environment:
-            - POSTGRES_USER=super
-            - POSTGRES_PASSWORD=hahaha321
-            - POSTGRES_DB=mydb
-        networks: 
-            - deploy
-        volumes:
-            - ./postgres-data:/var/lib/postgresql/data
 
     nodejs:
-        image: backend:1.4.0
+        image: afsanarozan/cafe-backend
         ports:
-            - 2000:2000
+            - 9191:2000
         depends_on:
             - postgres
             - redis    
         networks:
             - deploy
         environment: 
-            - DB_USER=postgres
+            - DB_USER=super
             - DB_DATABASE=mydb
             - DB_PASS=hahaha321
             - DB_HOST=postgres
@@ -46,7 +58,7 @@ services:
 
 networks:
     deploy:
-        driver: bridge
+   
     
 volumes:
     postgres-data:

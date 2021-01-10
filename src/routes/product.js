@@ -1,7 +1,7 @@
 const express = require("express") 
 const controller = require('../controller/product')
 const upload = require('../middleware/upload')
-const validate = require('../middleware/validate')
+const validate = require('../middleware/validate-using')
 const chace = require('../middleware/chace')
 const routes = express.Router()
 
