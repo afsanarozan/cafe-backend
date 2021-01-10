@@ -4,8 +4,8 @@ const routes =  require('./src/main')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const databases = require('./src/config/databases')
-const port = 2000
-const cors = require('cors')
+const port = 3000
+const cors = require("cors")
 const redis = require('./src/config/redis')
 const log = require('simple-node-logger').createSimpleFileLogger('project.log');
 const fs = require('fs')
@@ -21,6 +21,7 @@ server.use(routes)
 server.use(cors())
 server.use("/public", express.static("public"))
 
+
 databases.connect() 
 .then((result) => {
     console.log("Database Connected")
@@ -28,8 +29,13 @@ databases.connect()
     console.log("database not Coneceted")   
 });
 
+
 server.listen(port, () => {
     console.log(`You Are Running on port ${port}`)
+})
+
+server.get("/", (req, res) => {
+    res.send("API connected.")
 })
 
 redis.redisCheck()
@@ -40,8 +46,5 @@ redis.redisCheck()
     console.log(res)
 })
 
-server.get('/products/:id', cors(), function (req, res, next) {
-    res.json( {msg: 'This is CORS-enabled for a Single Route'})
-  })
 
  

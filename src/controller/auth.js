@@ -2,12 +2,11 @@ const model = require("../model/user")
 const respon = require("../helper/respon")
 const bcr = require("bcrypt")
 const jwt = require('jsonwebtoken')
-
-class Auth {
-login = async(req, res) => {
+const Auth = {}
+    
+    Auth.login = async(req, res) => {
     try {
         const passDB = await model.getByUser(req.body.name)
-        console
         
         if (passDB <= 0 ){
             return respon(res, 200, "Username tidak Ada")
@@ -17,8 +16,23 @@ login = async(req, res) => {
         const check = await bcr.compare(passReq, passDB[0].password)
 
         if(check) {
-            const result = await this.setToken(passDB[0].hak)
+            // const result = await this.setToken(passDB[0].name)            
+            // respon(res, 200, result)
+            const payload = {
+                name: passDB[0].name,
+                hak: passDB[0].hak
+            }
+
+            const token =  jwt.sign(payload, process.env.JWT_KEYS, {expiresIn: 7200})
+            const refreshToken =  jwt.sign(payload, process.env.JWT_KEYS, {expiresIn: 7200})
+            
+            const result = {
+                token: token,
+                refreshToken : refreshToken,
+                msg: "Token created, login success",
+            }
             respon(res, 200, result)
+            console.log(payload)
         } else {
             respon(res, 200, "gagal Login")
         }
@@ -28,31 +42,7 @@ login = async(req, res) => {
     }
     
 }
-
-setToken = async (hak) => {
-    try {
-    const payload = {
-        hak : hak,
-    }
-
-    const token =  jwt.sign(payload, process.env.JWT_KEYS, {expiresIn: 7200})
-    const refreshToken =  jwt.sign(payload, process.env.JWT_KEYS, {expiresIn: 7200})
     
-    const result = {
-        token: token,
-        refreshToken : refreshToken,
-        msg: "Token created, login success",
-    }
-    console.log(result.msg)
-    return result    
-    } catch (error) {
-        throw error
-        
-}
-    
-}
 
 
-}
-
-module.exports = new Auth()
+module.exports = Auth
