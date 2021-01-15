@@ -1,12 +1,12 @@
 FROM node:lts-alpine
 
-RUN mkdir -p /usr/sampleapp
+RUN mkdir -p /backend
 
-WORKDIR /usr/sampleapp
+WORKDIR /backend
 
 COPY package*.json ./
 
-COPY . .
+COPY . ./
 
 RUN npm install
 

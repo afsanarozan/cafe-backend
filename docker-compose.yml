@@ -9,20 +9,10 @@ services:
         volumes:
             - ./postgres-data:/var/lib/postgresql/data
         environment:
-            - POSTGRES_USER=super
+            - POSTGRES_USER=nopal
             - POSTGRES_PASSWORD=hahaha321
             - POSTGRES_DB=mydb
 
-    demo-pgadmin4: 
-        image: dpage/pgadmin4
-        environment: 
-            PGADMIN_DEFAULT_EMAIL: afsanarozanaufal@gmail.com
-            PGADMIN_DEFAULT_PASSWORD: hahaha321
-        ports: 
-            - 7171:80
-        networks: 
-            - deploy
-    
     redis:
         image: redis
         command: redis-server --requirepass redispass123
@@ -47,14 +37,14 @@ services:
         networks:
             - deploy
         environment: 
-            - DB_USER=super
-            - DB_DATABASE=mydb
+            - DB_USER=nopal
+            - DB_DATABASE=cafe-backend
             - DB_PASS=hahaha321
             - DB_HOST=postgres
             - REDIS_HOST=redis
             - REDIS_PASS=redispass123
             - REDIS_PORT=6379
-            - JWT_KEYS=awokawokawok
+            - JWT_KEYS=AUx857wf^p!fp>+Nx5KK-.xucu7p
 
 networks:
     deploy:

@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+
+---
+apiVersion: v1
+data:
+  DB_HOST: "localhost"
+  DB_USER: "nopal"
+  DB_PASSWORD: "hahaha321"
+  DB_NAME: "mydb"
+  DB_PORT: "29999"
+  REDIS_HOST: "localhost"
+  REDIS_PORT: "27777"
+  REDIS_PASSWORD: "hahaha321"
+  JWT_KEYS: "AUx857wf^p!fp>+Nx5KK-.xucu7p"
+
+kind: ConfigMap
+metadata:
+  name: env-backend
+  namespace: production
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cafe-backend-app
+  namespace: production
+  labels:
+    tier: cafe-backend
+spec:
+  selector:
+    matchLabels:
+      app: cafe-backend
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: cafe-backend
+    spec:
+      containers:
+        - name: cafe-backend
+          image: afsanarozan/cafe-backend:lts
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2000
+          envFrom:
+            - configMapRef:
+                name: env-backend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cafe-service-backend
+  namespace: production
+spec:
+  selector:
+    app: cafe-backend
+  ports:
+    - port: 80
+      targetPort: 2000
+      protocol: TCP
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: cafe-ingress
+  namespace: production
+  labels:
+    app: cafe-ingress
+spec:
+  rules:
+    - host: api.afsanarozannaufal.site
+      http:
+        paths:
+          - backend:
+              serviceName: cafe-service-backend
+              servicePort: 80

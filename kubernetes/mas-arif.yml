@@ -1,0 +1,99 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+
+---
+apiVersion: v1
+data:
+  DB_HOST: "localhost"
+  DB_USER: "nopal"
+  DB_PASSWORD: "hahaha321"
+  DB_NAME: "mydb"
+  DB_PORT: "29999"
+  REDIS_HOST: "localhost"
+  REDIS_PORT: "27777"
+  REDIS_PASSWORD: "1sampai9"
+  JWT_KEYS: "AUx857wf^p!fp>+Nx5KK-.xucu7p"
+
+kind: ConfigMap
+metadata:
+  name: env-restaurant
+  namespace: production
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-backend-app
+  namespace: production
+  labels:
+    tier: restaurant-backend
+spec:
+  selector:
+    matchLabels:
+      app: restaurant-backend
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: restaurant-backend
+    spec:
+      containers:
+        - name: restaurant-backend
+          image: arifh19/restaurant-backend:master
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /backend/public/upload
+              name: backend-volume
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: env-restaurant
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+      volumes:
+        - name: backend-volume
+          hostPath:
+            path: /home/ubuntu/restaurant/production/data
+            type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurant-service-backend
+  namespace: production
+spec:
+  selector:
+    app: restaurant-backend
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: restaurant-ingress
+  namespace: production
+  labels:
+    app: restaurant-ingress
+spec:
+  rules:
+    - host: api.afsanarozannaufal.site
+      http:
+        paths:
+          - backend:
+              serviceName: restaurant-service-frontend
+              servicePort: 80
